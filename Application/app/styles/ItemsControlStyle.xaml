@@ -1,0 +1,10 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Style TargetType="ItemsControl">
+    <Setter Property="FontFamily" Value="Arial"/>
+    <Setter Property="Background" Value="#21252b"/>
+    <Setter Property="Foreground" Value="#ffffff"/>
+  </Style>
+
+</ResourceDictionary>

@@ -1,0 +1,25 @@
+<UserControl x:Class="Alakazam.Controls.TransformControl"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006">
+
+
+  <!-- <StackPanel Orientation="Vertical">
+    <TextBlock Style="{StaticResource header}" Text="Transform" Margin="5"/>
+
+    <TextBlock Grid.Column="1" Text="Position" Margin="5,0,5,0"/>
+    <UniformGrid Rows="1">
+      <TextBox x:Name="xInput" Text="{Binding X, Mode=TwoWay, Delay=300, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0" GotFocus="OnFocus" PreviewKeyUp="OnKeyUp"/>
+      <TextBox x:Name="yInput" Text="{Binding Y, Mode=TwoWay, Delay=300, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0" GotFocus="OnFocus" PreviewKeyUp="OnKeyUp"/>
+    </UniformGrid>
+
+    <TextBlock Text="Rotation" Margin="5,5,5,0"/>
+    <TextBox x:Name="rotationInput" Text="{Binding Rotation, Mode=TwoWay, Delay=300, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0" GotFocus="OnFocus" PreviewKeyUp="OnKeyUp"/>
+
+    <TextBlock Text="Scale" Margin="5,5,5,0"/>
+    <UniformGrid Rows="1">
+      <TextBox x:Name="sxInput" Text="{Binding XScale, Mode=TwoWay, Delay=300, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0" GotFocus="OnFocus" PreviewKeyUp="OnKeyUp"/>
+      <TextBox x:Name="syInput" Text="{Binding YScale, Mode=TwoWay, Delay=300, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,5,0" GotFocus="OnFocus" PreviewKeyUp="OnKeyUp"/>
+    </UniformGrid>
+  </StackPanel> -->
+</UserControl>

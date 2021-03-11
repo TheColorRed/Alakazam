@@ -1,0 +1,17 @@
+﻿<Application x:Class="Alakazam.App"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:local="clr-namespace:Alakazam" StartupUri="app/MainWindow.xaml">
+  <Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="app/styles/TextElementStyle.xaml" />
+        <ResourceDictionary Source="app/styles/ListBoxStyle.xaml" />
+        <ResourceDictionary Source="app/styles/ItemsControlStyle.xaml" />
+        <ResourceDictionary Source="app/styles/ButtonStyle.xaml" />
+        <ResourceDictionary Source="app/styles/TextBoxStyle.xaml" />
+        <ResourceDictionary Source="app/styles/ActionsStyle.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Application.Resources>
+</Application>

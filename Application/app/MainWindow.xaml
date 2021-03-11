@@ -1,0 +1,43 @@
+﻿<Window x:Class="Alakazam.MainWindow"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:local="clr-namespace:Alakazam"
+  xmlns:ctrl="clr-namespace:Alakazam.Controls" mc:Ignorable="d" Closed="OnClosed" Title="Alakazam" Height="450" Width="800" Style="{StaticResource defaultStyles}">
+  <DockPanel>
+    <ctrl:MainMenuControl DockPanel.Dock="Top"/>
+    <local:DpiDecorator DockPanel.Dock="Bottom">
+      <Grid>
+        <Grid.Resources>
+          <Style TargetType="GridSplitter">
+            <Setter Property="Background" Value="#1f1f1f"/>
+            <Setter Property="ShowsPreview" Value="True"/>
+            <Setter Property="Width" Value="5"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Style.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#61afef"/>
+              </Trigger>
+            </Style.Triggers>
+          </Style>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition x:Name="layersGridSplitter" MinWidth="280" Width="{Binding LayersGridSplitterWidth}"/>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition/>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition x:Name="actionsGridSplitter" MinWidth="280" Width="{Binding ActionsGridSplitterWidth}"/>
+        </Grid.ColumnDefinitions>
+
+        <ctrl:LayersControl x:Name="Layers" Grid.Column="0"/>
+        <ctrl:CanvasControl x:Name="DisplayCanvas" Grid.Column="2"/>
+        <ctrl:ActionsControl x:Name="Actions" Grid.Column="4"/>
+
+        <GridSplitter Grid.Column="1"/>
+        <GridSplitter Grid.Column="3"/>
+      </Grid>
+    </local:DpiDecorator>
+  </DockPanel>
+</Window>

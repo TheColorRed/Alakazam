@@ -1,0 +1,23 @@
+{
+  "git.ignoreLimitWarning": true,
+  "csharp.referencesCodeLens.enabled": false,
+  "xmlTools.splitXmlnsOnFormat": true,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "*/obj": true,
+    "*/bin": true,
+    "Plugins/*/obj": true,
+    "Plugins/*/bin": true,
+  },
+  "cSpell.words": [
+    "Argb",
+    "IGUI",
+    "Luminize",
+    "Posterize",
+    "Unsharp"
+  ]
+}

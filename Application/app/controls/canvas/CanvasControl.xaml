@@ -1,0 +1,18 @@
+<UserControl x:Class="Alakazam.Controls.CanvasControl"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Loaded="OnLoaded">
+  <ScrollViewer HorizontalScrollBarVisibility="Auto">
+    <ScrollViewer.Resources>
+      <Style TargetType="ScrollViewer">
+        <Setter Property="Background" Value="#454545"/>
+      </Style>
+    </ScrollViewer.Resources>
+    <Canvas Height="{Binding ImageHeight}" Width="{Binding ImageWidth}">
+      <Canvas.Background>
+        <ImageBrush ImageSource="{Binding CheckerBoard}"></ImageBrush>
+      </Canvas.Background>
+      <Image x:Name="preview" Stretch="None" Height="{Binding ImageHeight}" Width="{Binding ImageWidth}" Source="{Binding DisplayImage}" />
+    </Canvas>
+  </ScrollViewer>
+</UserControl>
