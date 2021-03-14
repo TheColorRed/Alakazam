@@ -11,7 +11,7 @@ using Alakazam.ImageMagick;
 namespace Alakazam.Controls {
   public partial class CanvasControl : UserControl, INotifyPropertyChanged {
 
-    public readonly Project project = MainWindow.project;
+    public readonly Project project = Engine.Engine.project;
 
     public event PropertyChangedEventHandler PropertyChanged;
     public BitmapImage displayImage;

@@ -2,8 +2,10 @@ using Alakazam.Engine;
 using Alakazam.ImageMagick;
 using ImageMagick;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Media.Imaging;
+using Paths = Alakazam.Engine.Paths;
 
 namespace Alakazam.Commands {
   public static class Composite {
@@ -13,9 +15,10 @@ namespace Alakazam.Commands {
       var height = project.size.height;
       var layers = project.layers.ToList();
 
-      using var image = new MagickImage(MagickColors.Transparent, width, height);
-      image.Settings.Format = MagickFormat.Bmp;
+      using var final = new MagickImage(MagickColors.Transparent, width, height);
+      // final.Settings.Format = MagickFormat.Bmp;
 
+      // for (int i = 0; i < project.layers.Count; i++) {
       for (int i = project.layers.Count - 1; i >= 0; i--) {
         var layer = project.layers[i];
 
@@ -33,22 +36,17 @@ namespace Alakazam.Commands {
         var isAnchored = layer.transform.IsAnchored;
         var anchor = layer.transform.Anchor;
 
-        // Set a mask on the layer if there is one.
-        if (layer.LayerMask?.image is MagickImage mask) {
-          image.SetWriteMask(mask);
-        }
-
-        if (isAnchored) {
-          image.Composite(layer.FilteredImage, anchor, blend, Channels.RGB);
-        } else {
-          image.Composite(layer.FilteredImage, x, y, blend, Channels.RGB);
-        }
-
-        // Remove any masks that have been added to the layer.
-        image.RemoveWriteMask();
+        using var filter = layer.FilteredImage.Clone();
+        try {
+          if (isAnchored) {
+            final.Composite(filter, anchor, blend, Channels.RGB);
+          } else {
+            final.Composite(filter, x, y, blend, Channels.RGB);
+          }
+        } catch { }
       }
 
-      return image.ToBitmapImage();
+      return final.ToBitmapImage();
     }
 
     /// <summary>

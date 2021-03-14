@@ -28,6 +28,12 @@ namespace Alakazam.Editor {
         DataContext = data
       };
 
+      var tooltip = property.Property.GetCustomAttribute<TooltipAttribute>();
+      if (tooltip is TooltipAttribute attr) {
+        textBlock.ToolTip = attr.toolTip;
+        ToolTipService.SetShowDuration(textBlock, int.MaxValue);
+      }
+
       var checkBox = new CheckBox {
         Margin = new Thickness(5, 0, 0, 0),
         IsChecked = (bool)property.Property.GetValue(action),

@@ -49,12 +49,12 @@
 
 //     [JsonIgnore]
 //     public string LayerPath {
-//       get { return Helpers.GetLayerPath(MainWindow.project, this); }
+//       get { return Helpers.GetLayerPath(Engine.Engine.project, this); }
 //     }
 
 //     [JsonIgnore]
 //     public string BasePath {
-//       get { return Helpers.GetBaseLayerPath(MainWindow.project, this); }
+//       get { return Helpers.GetBaseLayerPath(Engine.Engine.project, this); }
 //     }
 
 //     [JsonIgnore]

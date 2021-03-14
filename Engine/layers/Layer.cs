@@ -43,15 +43,21 @@ namespace Alakazam.Engine {
     [JsonIgnore] public Project Project { get; set; }
     [JsonIgnore] public string LayerVisibilityIcon => visible ? "Eye" : "EyeSlash";
 
+    /// <summary>
+    /// An optional layer mask.
+    /// </summary>
     public LayerMask? LayerMask { get; set; }
 
+    /// <summary>
+    /// The original image before anything has been applied.
+    /// </summary>
     [JsonIgnore]
     public MagickImage Image {
       get {
         if (imageOriginal == null) {
           if (File.Exists(BasePath)) {
             imageOriginal = new MagickImage(BasePath) {
-              BackgroundColor = MagickColors.Transparent
+              // BackgroundColor = MagickColors.Transparent
             };
           } else {
             imageOriginal = new MagickImage(MagickColors.Transparent, Project.size.width, Project.size.height);
@@ -64,6 +70,9 @@ namespace Alakazam.Engine {
       set => imageOriginal = value;
     }
 
+    /// <summary>
+    /// The image after all filters and actions have been applied.
+    /// </summary>
     [JsonIgnore]
     public MagickImage FilteredImage {
       get => filteredImage ?? Image;

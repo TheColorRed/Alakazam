@@ -13,6 +13,7 @@ using Alakazam.ImageMagick;
 using Alakazam.Plugin;
 using ImageMagick;
 using Action = Alakazam.Plugin.Action;
+using Color = System.Windows.Media.Color;
 
 namespace Alakazam.Controls {
 
@@ -21,28 +22,32 @@ namespace Alakazam.Controls {
   public partial class ActionsControl : UserControl {
 
     public readonly ItemsControl actions = new ItemsControl();
+    public readonly ItemsControl channels = new ItemsControl();
     public static DockPanel panel;
 
-    private readonly Project project = MainWindow.project;
+    private readonly Project project = Engine.Engine.project;
     private readonly Window mainWindow = Application.Current.MainWindow;
     // public static BindingData bindingData;
     public static bool isDragValue = false;
     private double lastPositionX = 0;
     private DragDirection direction = DragDirection.None;
 
-    public Engine.Transform Transform => MainWindow.project.selectedLayer.transform;
+    public Engine.Transform Transform => Engine.Engine.project.selectedLayer.transform;
 
     public ActionsControl() {
       DataContext = this;
       // actions = actions;
       InitializeComponent();
-      stackPanel.Children.Add(actions);
-      EventBus.LayerSelectionChanged += OnBuildActions;
-      EventBus.ProjectInitialized += OnBuildActions;
-      EventBus.LayerActionAdded += OnBuildActions;
-      GUILayout.ActionsUpdated += OnBuildActions;
+      layersPanel.Children.Add(actions);
+      channelsPanel.Children.Add(channels);
+      EventBus.LayerSelectionChanged += OnBuildPanels;
+      EventBus.ProjectInitialized += OnBuildPanels;
+      EventBus.LayerActionAdded += OnBuildPanels;
+      GUILayout.ActionsUpdated += OnBuildPanels;
       EventBus.LayerActionProcessChanged += OnUpdateProgressVisibility;
       EventBus.OpenColorPicker += OnOpenColorPicker;
+      EventBus.LayerFiltered += OnBuildChannels;
+      // EventBus.LayerActionRemoved += OnBuildChannels;
 
       mainWindow.MouseUp += (sender, evt) => {
         if (isDragValue) {
@@ -100,8 +105,15 @@ namespace Alakazam.Controls {
       }
     }
 
-    public void OnBuildActions(object sender, EventArgs evt) {
-      Dispatcher.BeginInvoke(new System.Action(() => Build()));
+    public void OnBuildPanels(object sender, EventArgs evt) {
+      Dispatcher.BeginInvoke(new System.Action(() => {
+        BuildActionsPanel();
+        BuildChannelsPanel();
+      }));
+    }
+
+    public void OnBuildChannels(object sender, EventArgs evt) {
+      Dispatcher.BeginInvoke(new System.Action(() => BuildChannelsPanel()));
     }
 
     private void OnUpdateProgressVisibility(object sender, EventArgs evt) {
@@ -122,7 +134,7 @@ namespace Alakazam.Controls {
       }));
     }
 
-    private void Build() {
+    private void BuildActionsPanel() {
       var layer = project.selectedLayer;
       var layerActions = layer.actions;
       actions.Items.Clear();
@@ -170,7 +182,7 @@ namespace Alakazam.Controls {
             actions.Items.Add(panel);
           }
         }
-        if (guiAction.action != null && index > 0) {
+        if (guiAction.action != null && index > 0 && !guiAction.action.Collapsed) {
           var progressBar = new ProgressBar {
             IsIndeterminate = true,
             Margin = new Thickness(0, 5, 0, 0),
@@ -179,14 +191,43 @@ namespace Alakazam.Controls {
           };
           actions.Items.Add(progressBar);
         }
-        if (guiAction.action != null && index < GUILayout.Actions.Count - 1) {
-          var top = guiAction.action.Collapsed ? 0 : 10;
-          var separator = new Separator {
-            Margin = new Thickness(0, top, 0, 0)
-          };
-          actions.Items.Add(separator);
-        }
+        // if (guiAction.action != null && index < GUILayout.Actions.Count - 1) {
+        var top = guiAction.action != null && guiAction.action.Collapsed ? 0 : 10;
+        var separator = new Separator {
+          Margin = new Thickness(0, 0, 0, 0),
+          Background = new SolidColorBrush(Color.FromRgb(0x0, 0x0, 0x0))
+        };
+        actions.Items.Add(separator);
+        // }
         index++;
+      }
+    }
+
+    private void BuildChannelsPanel() {
+      var layer = project.selectedLayer;
+      channels.Items.Clear();
+
+      using var image = (MagickImage)layer.FilteredImage.Clone();
+      var layerChannels = image.Separate(Channels.Red | Channels.Green | Channels.Blue | Channels.Alpha);
+
+      channels.Items.Add(GUILayout.Header("RGB"));
+      channels.Items.Add(new Image { Source = image.ToBitmapImage(false) });
+
+      var i = 0;
+      foreach (MagickImage channel in layerChannels) {
+        var imageChannel = new Image { Source = channel.ToBitmapImage() };
+
+        var txt = "";
+        switch (i) {
+          case 0: txt = "Red"; break;
+          case 1: txt = "Green"; break;
+          case 2: txt = "Blue"; break;
+          case 3: txt = "Alpha"; break;
+        }
+
+        if (txt.Length > 0) channels.Items.Add(GUILayout.Header(txt));
+        channels.Items.Add(imageChannel);
+        i++;
       }
     }
   }

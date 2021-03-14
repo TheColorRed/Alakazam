@@ -3,7 +3,7 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:ctrl="clr-namespace:Alakazam.Controls">
-  <ComboBox Margin="5" MaxDropDownHeight="600" x:Name="blendModes" SelectionChanged="OnSelectionChanged">
+  <ComboBox MaxDropDownHeight="600" x:Name="blendModes" SelectionChanged="OnSelectionChanged">
     <ComboBox.ItemContainerStyle>
       <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
         <Style.Triggers>

@@ -32,17 +32,15 @@ namespace Alakazam.Editor {
         VerticalAlignment = VerticalAlignment.Center
       };
 
+      var tooltip = property.Property.GetCustomAttribute<TooltipAttribute>();
+      if (tooltip is TooltipAttribute attr) {
+        textBlock.ToolTip = attr.toolTip;
+        ToolTipService.SetShowDuration(textBlock, int.MaxValue);
+      }
+
       var comboBox = new ComboBox {
         Margin = new Thickness(5, 0, 2, 0),
         Foreground = Brushes.Black
-      };
-
-      comboBox.SelectionChanged += (sender, evt) => {
-        var comboBox = (ComboBox)sender;
-        var item = (ComboBoxItem)comboBox.SelectedItem;
-        var context = (BindingData)item.DataContext;
-        propertyInfo.SetValue(action, context.Value);
-        EventBus.OnLayerActionChanged(sender);
       };
 
       comboBox.DropDownClosed += (sender, evt) => {
@@ -67,6 +65,15 @@ namespace Alakazam.Editor {
         }
         comboBox.Items.Add(comboBoxItem);
       }
+
+      // Note: Add the event after the initial selection so it doesn't get triggered.
+      comboBox.SelectionChanged += (sender, evt) => {
+        var comboBox = (ComboBox)sender;
+        var item = (ComboBoxItem)comboBox.SelectedItem;
+        var context = (BindingData)item.DataContext;
+        propertyInfo.SetValue(action, context.Value);
+        EventBus.OnLayerActionChanged(sender);
+      };
 
       DockPanel.SetDock(textBlock, Dock.Left);
       DockPanel.SetDock(comboBox, Dock.Right);

@@ -5,9 +5,11 @@ using ImageMagick;
 
 namespace Alakazam.ImageMagick {
   public static partial class AutoMagick {
-    public static BitmapImage ToBitmapImage(this MagickImage image) {
+    public static BitmapImage ToBitmapImage(this MagickImage image, bool alpha = true) {
       image.Settings.BackgroundColor = MagickColors.Transparent;
-      var imageData = image.ToByteArray(MagickFormat.Bmp);
+      using var tmp = image.Clone();
+      if (alpha == false) tmp.Alpha(AlphaOption.Off);
+      var imageData = tmp.ToByteArray(MagickFormat.Bmp);
       using var ms = new MemoryStream(imageData);
       var bitmap = new BitmapImage();
       bitmap.BeginInit();
@@ -21,6 +23,8 @@ namespace Alakazam.ImageMagick {
     public static BitmapImage GetImagePreview(this MagickImage image, Layer layer, Size size) {
       using var previewClone = image.Clone();
       using var checkerBoard = GetCheckerBoard(layer.Project.size, 45);
+
+      previewClone.Alpha(AlphaOption.Off);
 
       var x = layer.transform.Position.x;
       var y = layer.transform.Position.y;

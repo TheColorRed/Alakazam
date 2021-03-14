@@ -32,6 +32,10 @@
         <Separator/>
         <MenuItem Header="Text Layer"/>
       </MenuItem>
+      <MenuItem Header="Layer Mask">
+        <MenuItem Header="Radial Mask" Click="OnAddRadialMask"/>
+        <MenuItem Header="Elliptical Mask" Click="OnAddEllipticalMask"/>
+      </MenuItem>
       <MenuItem Header="Duplicate Layer" />
       <MenuItem Header="Duplicate Layer Image" />
       <MenuItem Header="Delete Layer" Click="OnLayerDelete" />

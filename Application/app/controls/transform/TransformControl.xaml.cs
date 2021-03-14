@@ -7,7 +7,7 @@
 // namespace Alakazam.Controls {
 //   public partial class TransformControl : UserControl, INotifyPropertyChanged {
 
-//     public Layer SelectedLayer { get { return MainWindow.project.selectedLayer; } }
+//     public Layer SelectedLayer { get { return Engine.Engine.project.selectedLayer; } }
 
 //     public int X {
 //       get { return SelectedLayer.transform.Position.x; }

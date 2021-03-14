@@ -50,6 +50,9 @@ namespace Alakazam.Engine {
     }
 
     private void InitializeProject() {
+      OpenCL.IsEnabled = true;
+      ResourceLimits.LimitMemory(new Percentage(100));
+
       selectedLayer = new EmptyLayer(this);
       layers = new ObservableCollection<Layer>();
       checkerBoardLarge = size.GetCheckerBoard(90);

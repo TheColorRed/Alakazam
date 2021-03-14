@@ -26,9 +26,16 @@ namespace Alakazam.Editor {
         Width = 100,
         MinWidth = 50,
         VerticalAlignment = VerticalAlignment.Center,
-        Cursor = Cursors.SizeWE,
+        // Cursor = Cursors.SizeWE,
         DataContext = data
       };
+
+      var tooltip = property.Property.GetCustomAttribute<TooltipAttribute>();
+      if (tooltip is TooltipAttribute attr) {
+        textBlock.ToolTip = attr.toolTip;
+        ToolTipService.SetShowDuration(textBlock, int.MaxValue);
+      }
+
       var textBox = new TextBox {
         Text = property.Property.GetValue(action).ToString(),
         Margin = new Thickness(5, 0, 0, 0),

@@ -18,7 +18,13 @@ namespace Alakazam.Engine {
       cancelSource?.Cancel();
       cancelSource = new CancellationTokenSource();
       Task.Run(() => {
-        using var clone = (MagickImage)Image.Clone();
+        var clone = (MagickImage)Image.Clone();
+
+        // Apply scale.
+        if (transform.Scale.x != 100 || transform.Scale.y != 100) {
+          clone.Scale(new Percentage(transform.Scale.x), new Percentage(transform.Scale.y));
+        }
+
         try {
           foreach (var command in actions) {
             cancelSource.Token.ThrowIfCancellationRequested();
@@ -40,9 +46,15 @@ namespace Alakazam.Engine {
               property.Apply(clone);
             }
 
+            clone.RemoveWriteMask();
+            clone.RemoveReadMask();
+            clone.RemoveRegionMask();
+
             // Remove an action masks that have been applied.
             clone.RemoveWriteMask();
           }
+        } catch (MagickException e) {
+          Debug.Log(e);
         } catch {
           ApplyActions(processingValue);
           return;
@@ -56,9 +68,22 @@ namespace Alakazam.Engine {
           clone.Rotate(transform.Rotation);
         }
 
-        // Apply scale.
-        if (transform.Scale.x != 100 || transform.Scale.y != 100) {
-          clone.Scale(new Percentage(transform.Scale.x), new Percentage(transform.Scale.y));
+        // Set a mask on the layer if there is one.
+        if (LayerMask?.Image is MagickImage layerMask) {
+          var mask = layerMask.Clone();
+          // var filtered = FilteredImage.Clone();
+          var image = new MagickImage(MagickColors.Transparent, clone.Width, clone.Height);
+
+          image.Composite(clone, CompositeOperator.Over);
+
+          if (transform.Scale.x != 100 || transform.Scale.y != 100)
+            mask.Scale(new Percentage(transform.Scale.x), new Percentage(transform.Scale.y));
+          mask.Alpha(AlphaOption.Off);
+          mask.Negate();
+
+          image.Composite(mask, CompositeOperator.CopyAlpha);
+
+          clone = (MagickImage)image.Clone();
         }
 
         // Set the new filtered image for the layer.
@@ -69,7 +94,7 @@ namespace Alakazam.Engine {
         if (value != processingValue) {
           ApplyActions(processingValue);
         }
-
+        clone.Dispose();
       }, cancelSource.Token);
     }
 
@@ -84,10 +109,21 @@ namespace Alakazam.Engine {
     }
 
     public void Delete() {
+      // Cancel any actions that might be happening.
       cancelSource?.Cancel();
+
+      // Delete the file on disk.
       var filePath = Paths.GetBaseLayerPath(Project, this);
       if (File.Exists(filePath)) File.Delete(filePath);
+
+      // Delete the filemask on disk.
+      LayerMask?.Delete(Project);
+
+      // Remove the layer from the project.
       Project.layers.Remove(this);
+
+      // Notify the application of the layer deletion
+      // and then save the project.
       EventBus.OnLayerDeleted(this);
       Project.AutoSave();
     }
@@ -95,13 +131,17 @@ namespace Alakazam.Engine {
     public void AddLayerMask(LayerMask layerMask) {
       LayerMask = layerMask;
       layerMask.Save(Project);
+      ApplyActions();
       Project.AutoSave();
+      EventBus.OnLayerMaskChanged(this);
     }
 
     public void RemoveLayerMask() {
       LayerMask.Delete(Project);
       LayerMask = null;
+      ApplyActions();
       Project.AutoSave();
+      EventBus.OnLayerMaskChanged(this);
     }
   }
 }

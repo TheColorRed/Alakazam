@@ -3,7 +3,7 @@
 
   <Style TargetType="ItemsControl">
     <Setter Property="FontFamily" Value="Arial"/>
-    <Setter Property="Background" Value="#21252b"/>
+    <!-- <Setter Property="Background" Value="#21252b"/> -->
     <Setter Property="Foreground" Value="#ffffff"/>
   </Style>
 

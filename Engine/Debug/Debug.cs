@@ -16,7 +16,7 @@ namespace Alakazam.Engine {
       times.TryGetValue(tag, out DateTime value);
       if (value != null) {
         var t = DateTime.Now - value;
-        Console.WriteLine(tag + ": " + t.TotalMilliseconds.ToString());
+        Console.WriteLine($"{tag}: {t.TotalMilliseconds.ToString()}");
       }
     }
 

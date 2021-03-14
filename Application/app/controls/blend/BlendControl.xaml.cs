@@ -30,7 +30,7 @@ namespace Alakazam.Controls {
 
     public Layer SelectedLayer {
       get {
-        return MainWindow.project.selectedLayer;
+        return Engine.Engine.project.selectedLayer;
       }
     }
 

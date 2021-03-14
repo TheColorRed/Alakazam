@@ -6,7 +6,7 @@ using Alakazam.Engine.Events;
 namespace Alakazam.Controls {
   public partial class LayerActionButtonsControl : UserControl {
 
-    private readonly Project project = MainWindow.project;
+    private readonly Project project = Engine.Engine.project;
 
     public LayerActionButtonsControl() {
       DataContext = this;

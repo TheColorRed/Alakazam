@@ -11,10 +11,12 @@ using Paths = Alakazam.Engine.Paths;
 namespace Alakazam {
   public partial class MainWindow : Window {
 
-    public static Project project =
-      new ProjectSettings()
-      .Load("47e64963-c59b-48a6-a6be-295a7c188881");
+    // public static Project project =
+    // new ProjectSettings()
+    // .Load("47e64963-c59b-48a6-a6be-295a7c188881");
     // .Load("95d1jg74-761d-460d-889d-003c8236nd9g");
+
+    public Project Project => Engine.Engine.project;
 
     public static ApplicationSettings settings;
 
@@ -27,7 +29,6 @@ namespace Alakazam {
     }
 
     public MainWindow() {
-      OpenCL.IsEnabled = true;
       var root = Paths.AppDataDirectory();
       Loaded += OnLoaded;
       DataContext = this;
@@ -44,8 +45,8 @@ namespace Alakazam {
       if (settings.fullScreen) {
         if (IsLoaded) WindowState = WindowState.Maximized;
       }
-      if (project.layers.Count > 0) {
-        project.selectedLayer = project.layers[0];
+      if (Project.layers.Count > 0) {
+        Project.selectedLayer = Project.layers[0];
       }
       EventBus.OnProjectInitialized(this);
     }

@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -16,11 +17,18 @@ namespace Alakazam.Editor {
         Margin = actionPropertyIndex == 0 ? new Thickness(5, 0, 5, 0) : new Thickness(5, 5, 5, 0)
       };
       actionPropertyIndex++;
+
       var textBlock = new TextBlock {
         Text = propertyInfo.Name.ToDisplayName(),
         Width = 100,
         VerticalAlignment = VerticalAlignment.Center
       };
+
+      var tooltip = property.Property.GetCustomAttribute<TooltipAttribute>();
+      if (tooltip is TooltipAttribute attr) {
+        textBlock.ToolTip = attr.toolTip;
+        ToolTipService.SetShowDuration(textBlock, int.MaxValue);
+      }
 
       var bindingDataX = new BindingData();
       var bindingDataY = new BindingData();

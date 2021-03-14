@@ -5,11 +5,49 @@
   xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
   xmlns:ctrl="clr-namespace:Alakazam.Controls">
   <DockPanel x:Name="layerActions" Style="{StaticResource layerActions}">
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-      <StackPanel x:Name="stackPanel" Orientation="Vertical">
-        <ctrl:BlendControl/>
-        <!-- Actions are built dynamically see code. -->
-      </StackPanel>
-    </ScrollViewer>
+
+    <TabControl>
+      <TabControl.Resources>
+        <Style TargetType="TabItem">
+          <Setter Property="Template">
+            <Setter.Value>
+              <ControlTemplate TargetType="TabItem">
+                <Grid Name="Panel">
+                  <ContentPresenter Name="ContentSite" VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Header" Margin="10,2"/>
+                </Grid>
+                <ControlTemplate.Triggers>
+                  <Trigger Property="IsSelected" Value="True">
+                    <Setter TargetName="Panel" Property="Background" Value="#3d3d3d" />
+                    <Setter Property="TextElement.Foreground" TargetName="ContentSite" Value="#bdbdbd"/>
+                  </Trigger>
+                  <Trigger Property="IsSelected" Value="False">
+                    <Setter TargetName="Panel" Property="Background" Value="#282828" />
+                    <Setter Property="TextElement.Foreground" TargetName="ContentSite" Value="#bdbdbd"/>
+                  </Trigger>
+                </ControlTemplate.Triggers>
+              </ControlTemplate>
+            </Setter.Value>
+          </Setter>
+        </Style>
+      </TabControl.Resources>
+      <TabItem Header="Actions">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+          <StackPanel x:Name="layersPanel" Orientation="Vertical">
+            <ctrl:BlendControl/>
+            <!-- Actions are built dynamically see code. -->
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+      <TabItem Header="Channels">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+          <StackPanel x:Name="channelsPanel" Orientation="Vertical"></StackPanel>
+        </ScrollViewer>
+      </TabItem>
+      <TabItem Header="Resources">
+
+      </TabItem>
+    </TabControl>
+
+
   </DockPanel>
 </UserControl>

@@ -8,7 +8,7 @@ namespace Alakazam.Controls {
   public partial class LayersControl : UserControl {
     // public event PropertyChangedEventHandler PropertyChanged;
 
-    public readonly Project project = MainWindow.project;
+    public readonly Project project = Engine.Engine.project;
 
     public ObservableCollection<Layer> Layers {
       get { return project.layers; }

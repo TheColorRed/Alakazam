@@ -7,16 +7,23 @@ namespace Alakazam.Engine {
 
     [JsonProperty] private readonly string fileName;
 
-    [JsonIgnore] public MagickImage Image { get; set; }
+    private MagickImage mask;
+    [JsonIgnore]
+    public MagickImage Image {
+      get {
+        if (mask == null) mask = Load(Engine.project);
+        return mask;
+      }
+      set => mask = value;
+    }
 
-    [JsonConstructor]
-    public LayerMask(string fileName) => this.fileName = fileName;
+    [JsonConstructor] public LayerMask(string fileName) => this.fileName = fileName;
 
-    public void Load(Project project) {
+    public MagickImage Load(Project project) {
       var resources = Paths.ResourcesPath(project);
       var path = Path.Combine(resources, "masks", fileName);
 
-      Image = new MagickImage(path);
+      return new MagickImage(path);
     }
 
     public void Save(Project project) {
@@ -24,6 +31,7 @@ namespace Alakazam.Engine {
         var resources = Paths.ResourcesPath(project);
         var path = Path.Combine(resources, "masks", fileName);
 
+        Directory.CreateDirectory(Path.GetDirectoryName(path));
         Image.Write(path, MagickFormat.Bmp);
       }
     }

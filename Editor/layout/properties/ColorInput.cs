@@ -27,6 +27,12 @@ namespace Alakazam.Editor {
         VerticalAlignment = VerticalAlignment.Center
       };
 
+      var tooltip = property.Property.GetCustomAttribute<TooltipAttribute>();
+      if (tooltip is TooltipAttribute attr) {
+        textBlock.ToolTip = attr.toolTip;
+        ToolTipService.SetShowDuration(textBlock, int.MaxValue);
+      }
+
       var color = ((MagickColor)property.Property.GetValue(action)).ToByteArray();
 
       var colorButton = new Button {

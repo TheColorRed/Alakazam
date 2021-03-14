@@ -9,12 +9,12 @@ namespace Alakazam.Editor {
   public static partial class GUILayout {
 
     // [JsonIgnore]
-    // public Project Project { get { return MainWindow.project; } }
+    // public Project Project { get { return Engine.Engine.project; } }
 
     internal static Panel GetActionHeader(GUIAction guiAction, bool enableable, bool toggleable, bool deleteable) {
       var action = guiAction.action;
       var grid = new Grid {
-        Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0x2c, 0x31, 0x3a)),
+        Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(0x50, 0x50, 0x50)),
         Margin = new Thickness(0, 0, 0, action.Collapsed ? 0 : 5)
       };
       var c1 = new ColumnDefinition();

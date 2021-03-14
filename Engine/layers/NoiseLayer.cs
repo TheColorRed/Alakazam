@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using Alakazam.Editor;
 using Alakazam.ImageMagick;
 using ImageMagick;
 using Newtonsoft.Json;
@@ -8,6 +9,7 @@ using Newtonsoft.Json;
 namespace Alakazam.Engine {
   public class LayerNoise : Layer {
 
+    [Tooltip("Whether or not the noise is in color or black and white.")]
     public bool IsColor { get; set; } = false;
 
     [JsonConstructor]

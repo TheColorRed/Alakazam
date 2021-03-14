@@ -8,13 +8,15 @@ using Alakazam.Engine.Events;
 using Action = Alakazam.Plugin.Action;
 using Alakazam.Editor;
 using System.ComponentModel;
+using Alakazam.ImageMagick;
+using ImageMagick;
 
 namespace Alakazam.Controls {
   public partial class MainMenuControl : UserControl {
 
-    private readonly Project project = MainWindow.project;
+    private Project Project => Engine.Engine.project;
 
-    private Layer SelectedLayer { get { return project.selectedLayer; } }
+    private Layer SelectedLayer { get { return Project.selectedLayer; } }
 
     public bool AutoSaveEnabled { get { return MainWindow.settings.autoSave; } }
 
@@ -32,24 +34,24 @@ namespace Alakazam.Controls {
       var openFileDialog = new System.Windows.Forms.OpenFileDialog();
       var result = openFileDialog.ShowDialog();
       if (result == System.Windows.Forms.DialogResult.OK) {
-        project.AddLayer(openFileDialog.FileName);
+        Project.AddLayer(openFileDialog.FileName);
       }
     }
 
     public void OnNewEmptyLayer(object sender, EventArgs evt) {
-      project.AddEmptyLayer();
+      Project.AddEmptyLayer();
     }
 
     public void OnNewNoiseLayer(object sender, EventArgs evt) {
-      project.AddNoiseLayer();
+      Project.AddNoiseLayer();
     }
 
     public void OnLayerDelete(object sender, EventArgs evt) {
-      project.selectedLayer.Delete();
+      Project.selectedLayer.Delete();
     }
 
     public void OnSaveProject(object sender, EventArgs evt) {
-      project.Save();
+      Project.Save();
     }
 
     public void OnExportProject(object sender, EventArgs evt) {
@@ -60,7 +62,7 @@ namespace Alakazam.Controls {
       };
       var result = saveFileDialog.ShowDialog();
       if (result == System.Windows.Forms.DialogResult.OK) {
-        new ExportProject(project).Export(saveFileDialog.FileName);
+        new ExportProject(Project).Export(saveFileDialog.FileName);
       }
     }
 
@@ -103,6 +105,26 @@ namespace Alakazam.Controls {
       var tag = menuItem.Tag.ToString();
       var classPath = string.Format("Alakazam.Properties.{0}", tag);
       AddAction(classPath);
+    }
+
+    public void OnAddRadialMask(object sender, EventArgs evt) {
+      var guid = Guid.NewGuid().ToString();
+      var mask = new LayerMask(guid);
+      var width = Project.selectedLayer.FilteredImage.Width;
+      var height = Project.selectedLayer.FilteredImage.Height;
+      mask.Image = AutoMagick.RadialGradient(MagickColors.Black, MagickColors.White, width, height);
+
+      Project.selectedLayer.AddLayerMask(mask);
+    }
+
+    public void OnAddEllipticalMask(object sender, EventArgs evt) {
+      var guid = Guid.NewGuid().ToString();
+      var mask = new LayerMask(guid);
+      var width = Project.selectedLayer.Image.Width;
+      var height = Project.selectedLayer.Image.Height;
+      mask.Image = AutoMagick.EllipticalGradient(MagickColors.Black, MagickColors.White, width, height);
+
+      Project.selectedLayer.AddLayerMask(mask);
     }
 
     private void AddAction(string classPath) {
